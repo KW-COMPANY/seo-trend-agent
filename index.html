@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEOトレンド AIエージェント</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="hero">
+    <h1>🔍 SEOトレンド AIエージェント</h1>
+    <p class="subtitle">最新のSEO・Webマーケ情報を自動収集 → AI分析 → アクション提案</p>
+  </header>
+
+  <main class="container">
+    <!-- コントロールパネル -->
+    <section class="control-panel">
+      <div class="control-row">
+        <label for="keyword">注目キーワード（任意）:</label>
+        <input type="text" id="keyword" placeholder="例: コアアップデート / 生成AI SEO" />
+      </div>
+      <div class="control-row">
+        <label for="category">カテゴリ:</label>
+        <select id="category">
+          <option value="all">すべて</option>
+          <option value="algorithm">アルゴリズム更新</option>
+          <option value="ai">AI × SEO</option>
+          <option value="content">コンテンツ戦略</option>
+          <option value="technical">テクニカルSEO</option>
+        </select>
+      </div>
+      <button id="runAgent" class="btn-primary">🤖 エージェント実行</button>
+    </section>
+
+    <!-- 進捗表示 -->
+    <section id="progress" class="progress hidden">
+      <h3>エージェント処理ステータス</h3>
+      <ul id="progressList"></ul>
+    </section>
+
+    <!-- AI分析サマリー -->
+    <section id="summary" class="summary hidden">
+      <h2>📊 AIによる総合分析</h2>
+      <div id="summaryContent"></div>
+    </section>
+
+    <!-- ニュース一覧 -->
+    <section id="newsSection" class="news-section hidden">
+      <h2>📰 収集された最新トレンド</h2>
+      <div id="newsList" class="news-list"></div>
+    </section>
+
+    <!-- 推奨アクション -->
+    <section id="actions" class="actions hidden">
+      <h2>✅ 推奨アクション</h2>
+      <ol id="actionsList"></ol>
+    </section>
+  </main>
+
+  <footer>
+    <p>Powered by Cloudflare Workers + Workers AI + Gemini API</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
