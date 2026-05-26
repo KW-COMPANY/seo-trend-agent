@@ -3,64 +3,259 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>SEOトレンドアンテナAI</title>
+
+  <meta name="description" content="SEO・Googleアルゴリズム・生成AI SEOの最新情報を自動収集し、AIが分析・優先順位付け・改善提案を行うSEO特化AIエージェント。" />
+
+  <meta name="keywords" content="SEO,AIエージェント,Googleアルゴリズム,生成AI SEO,SEO分析,SEOニュース" />
+
+  <meta property="og:title" content="SEOトレンドアンテナAI" />
+  <meta property="og:description" content="SEO最新情報をAIが収集・分析・提案するSEO特化AIエージェント" />
+  <meta property="og:type" content="website" />
+
+  <meta name="theme-color" content="#667eea" />
+
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
+
+  <!-- Hero -->
   <header class="hero">
-    <h1>🔍 SEOトレンドアンテナAI</h1>
-    <p class="subtitle">最新のSEO・Webマーケ情報を自動収集 → AI分析 → アクション提案</p>
+    <div class="hero-inner">
+      <h1>🔍 SEOトレンドアンテナAI</h1>
+
+      <p class="subtitle">
+        SEO・Googleアルゴリズム・生成AI SEOの最新情報をAIが収集 →
+        分析 →
+        優先順位付け →
+        アクション提案
+      </p>
+
+      <div class="hero-badges">
+        <span class="badge">外部ニュース連携</span>
+        <span class="badge">AI分析</span>
+        <span class="badge">多段処理</span>
+        <span class="badge">SEO特化AIエージェント</span>
+      </div>
+    </div>
   </header>
 
   <main class="container">
-    <!-- コントロールパネル -->
+
+    <!-- コントロール -->
     <section class="control-panel">
-      <div class="control-row">
-        <label for="keyword">注目キーワード（任意）:</label>
-        <input type="text" id="keyword" placeholder="例: コアアップデート / 生成AI SEO" />
+
+      <div class="panel-title">
+        <h2>⚙️ エージェント設定</h2>
+        <p>
+          SEO関連ニュースを収集し、AIがトレンド分析と改善施策を生成します。
+        </p>
       </div>
+
       <div class="control-row">
-        <label for="category">カテゴリ:</label>
+        <label for="keyword">注目キーワード（任意）</label>
+
+        <input
+          type="text"
+          id="keyword"
+          maxlength="100"
+          placeholder="例: コアアップデート / 生成AI SEO / E-E-A-T"
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="control-row">
+        <label for="category">カテゴリ</label>
+
         <select id="category">
           <option value="all">すべて</option>
           <option value="algorithm">アルゴリズム更新</option>
           <option value="ai">AI × SEO</option>
           <option value="content">コンテンツ戦略</option>
           <option value="technical">テクニカルSEO</option>
+          <option value="general">一般SEO</option>
         </select>
       </div>
-      <button id="runAgent" class="btn-primary">🤖 エージェント実行</button>
+
+      <button id="runAgent" class="btn-primary">
+        🤖 エージェント実行
+      </button>
+
+      <div class="notice-box">
+        <p>
+          このAIエージェントは以下を自動実行します：
+        </p>
+
+        <ul>
+          <li>外部SEOニュースの収集</li>
+          <li>AIによるカテゴリ分類</li>
+          <li>重要トレンド分析</li>
+          <li>SEO改善施策の提案</li>
+          <li>優先度判定</li>
+        </ul>
+      </div>
+
     </section>
 
-    <!-- 進捗表示 -->
+    <!-- エラー -->
+    <section id="errorBox" class="error-box hidden">
+      <h3>⚠️ エラー</h3>
+      <p id="errorMessage"></p>
+    </section>
+
+    <!-- 進捗 -->
     <section id="progress" class="progress hidden">
-      <h3>エージェント処理ステータス</h3>
+
+      <div class="section-header">
+        <h2>🧠 AIエージェント処理状況</h2>
+      </div>
+
       <ul id="progressList"></ul>
+
+      <div class="agent-flow">
+        <div class="flow-item">
+          <span>① 外部収集</span>
+        </div>
+
+        <div class="flow-item">
+          <span>② 分類</span>
+        </div>
+
+        <div class="flow-item">
+          <span>③ 優先度判定</span>
+        </div>
+
+        <div class="flow-item">
+          <span>④ AI分析</span>
+        </div>
+
+        <div class="flow-item">
+          <span>⑤ 改善提案</span>
+        </div>
+      </div>
+
     </section>
 
-    <!-- AI分析サマリー -->
+    <!-- AI分析 -->
     <section id="summary" class="summary hidden">
-      <h2>📊 AIによる総合分析</h2>
-      <div id="summaryContent"></div>
-    </section>
 
-    <!-- ニュース一覧 -->
-    <section id="newsSection" class="news-section hidden">
-      <h2>📰 収集された最新トレンド</h2>
-      <div id="newsList" class="news-list"></div>
+      <div class="section-header">
+        <h2>📊 AIによる総合トレンド分析</h2>
+      </div>
+
+      <div id="summaryMeta" class="summary-meta"></div>
+
+      <div id="summaryContent"></div>
+
     </section>
 
     <!-- 推奨アクション -->
     <section id="actions" class="actions hidden">
-      <h2>✅ 推奨アクション</h2>
+
+      <div class="section-header">
+        <h2>✅ AI推奨アクション</h2>
+      </div>
+
       <ol id="actionsList"></ol>
+
     </section>
+
+    <!-- ニュース -->
+    <section id="newsSection" class="news-section hidden">
+
+      <div class="section-header">
+        <h2>📰 収集されたSEOトレンド</h2>
+      </div>
+
+      <div class="news-toolbar">
+
+        <div class="news-count">
+          <span id="newsCount">0</span> 件取得
+        </div>
+
+        <div class="news-source">
+          Google News / Search Engine Journal /
+          Search Engine Land /
+          Google Search Central
+        </div>
+
+      </div>
+
+      <div id="newsList" class="news-list"></div>
+
+    </section>
+
+    <!-- AI Agent 説明 -->
+    <section class="agent-info">
+
+      <div class="section-header">
+        <h2>🤖 このサイトが行うAIエージェント処理</h2>
+      </div>
+
+      <div class="agent-grid">
+
+        <div class="agent-card">
+          <h3>外部ナレッジ収集</h3>
+          <p>
+            複数のSEOニュースソースを巡回し、
+            最新情報を収集します。
+          </p>
+        </div>
+
+        <div class="agent-card">
+          <h3>AIカテゴリ分類</h3>
+          <p>
+            Workers AI が記事内容を解析し、
+            SEOカテゴリへ自動分類します。
+          </p>
+        </div>
+
+        <div class="agent-card">
+          <h3>トレンド分析</h3>
+          <p>
+            Gemini AI がSEOトレンドを分析し、
+            業界動向を要約します。
+          </p>
+        </div>
+
+        <div class="agent-card">
+          <h3>改善提案生成</h3>
+          <p>
+            AIが実務ベースのSEO改善アクションを
+            自動生成します。
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
   </main>
 
   <footer>
-    <p>Powered by Cloudflare Workers + Workers AI + Gemini API</p>
+
+    <div class="footer-inner">
+
+      <p>
+        Powered by
+        Cloudflare Workers /
+        Workers AI /
+        Gemini API /
+        GitHub Pages
+      </p>
+
+      <p class="footer-note">
+        SEO特化AIエージェント /
+        完全無料構成
+      </p>
+
+    </div>
+
   </footer>
 
   <script src="app.js"></script>
+
 </body>
 </html>
