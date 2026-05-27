@@ -15,6 +15,7 @@ const summaryContent = document.getElementById("summaryContent");
 
 const newsSection = document.getElementById("newsSection");
 const newsList = document.getElementById("newsList");
+const newsCountEl = document.getElementById("newsCount");
 
 const actionsEl = document.getElementById("actions");
 const actionsList = document.getElementById("actionsList");
@@ -93,11 +94,13 @@ async function runAgent() {
   try {
 
     // ============================================
-    // fetch timeout
+    // fetch timeout（55秒に延長：Worker側処理を待つ）
     // ============================================
     const timeoutId = setTimeout(() => {
-      currentController.abort();
-    }, 45000);
+      if (currentController) {
+        currentController.abort();
+      }
+    }, 55000);
 
     const response = await fetch(WORKER_URL, {
       method: "POST",
@@ -114,9 +117,12 @@ async function runAgent() {
     clearTimeout(timeoutId);
 
     // ============================================
-    // HTTPエラー
+    // HTTPエラー（ただしJSONとしてerrorフィールドがあれば内容を活かす）
     // ============================================
-    if (!response.ok) {
+    const contentType = response.headers.get("content-type") || "";
+    const isJson = contentType.includes("application/json");
+
+    if (!response.ok && !isJson) {
 
       let errorText = "";
 
@@ -134,9 +140,7 @@ async function runAgent() {
     // ============================================
     // JSON安全確認
     // ============================================
-    const contentType = response.headers.get("content-type") || "";
-
-    if (!contentType.includes("application/json")) {
+    if (!isJson) {
 
       const text = await response.text();
 
@@ -160,19 +164,14 @@ async function runAgent() {
     }
 
     // ============================================
-    // Workerエラー
-    // ============================================
-    if (data.error) {
-      throw new Error(data.error);
-    }
-
-    // ============================================
-    // データ正常化
+    // データ正常化（errorがあってもsummary等があれば表示する）
     // ============================================
     const summary =
-      typeof data.summary === "string"
+      typeof data.summary === "string" && data.summary.length > 0
         ? data.summary
-        : "分析結果を取得できませんでした。";
+        : (data.error
+            ? `エラー: ${data.error}`
+            : "分析結果を取得できませんでした。");
 
     const news =
       Array.isArray(data.news)
@@ -207,12 +206,12 @@ async function runAgent() {
     renderActions(actions);
 
     // ============================================
-    // 空データ対策
+    // 完全な空データのみ警告
     // ============================================
     if (
       news.length === 0 &&
       actions.length === 0 &&
-      !summary
+      (!summary || summary.length < 5)
     ) {
       throw new Error(
         "データが空でした。RSSまたはAI生成に失敗した可能性があります。"
@@ -249,7 +248,7 @@ async function startProgressAnimation() {
 
     renderProgress(i);
 
-    await sleep(500);
+    await sleep(700);
   }
 }
 
@@ -283,6 +282,11 @@ function renderNews(news) {
 
   newsList.innerHTML = "";
 
+  // 件数表示
+  if (newsCountEl) {
+    newsCountEl.textContent = String(Array.isArray(news) ? news.length : 0);
+  }
+
   if (!Array.isArray(news) || news.length === 0) {
 
     const empty = document.createElement("div");
@@ -291,7 +295,7 @@ function renderNews(news) {
 
     empty.innerHTML = `
       <p class="news-summary">
-        関連ニュースが見つかりませんでした。
+        関連ニュースが見つかりませんでした。キーワードやカテゴリを変更して再実行してください。
       </p>
     `;
 
@@ -306,7 +310,20 @@ function renderNews(news) {
 
     const div = document.createElement("div");
 
-    div.className = "news-item";
+    const importance =
+      typeof item.importance === "number"
+        ? Math.min(Math.max(item.importance, 1), 5)
+        : null;
+
+    // 重要度クラス
+    let priorityClass = "";
+    if (importance !== null) {
+      if (importance >= 4) priorityClass = "high-priority";
+      else if (importance === 3) priorityClass = "medium-priority";
+      else priorityClass = "low-priority";
+    }
+
+    div.className = `news-item ${priorityClass}`.trim();
 
     const safeTitle = escapeHtml(item.title || "タイトルなし");
 
@@ -327,11 +344,6 @@ function renderNews(news) {
     const safeSummary = escapeHtml(
       item.summary || ""
     );
-
-    const importance =
-      typeof item.importance === "number"
-        ? Math.min(Math.max(item.importance, 1), 5)
-        : null;
 
     div.innerHTML = `
       <h3>
@@ -428,11 +440,14 @@ function handleError(error) {
 
   summaryEl.classList.remove("hidden");
 
-  newsSection.classList.add("hidden");
-
-  actionsEl.classList.add("hidden");
-
-  alert(message);
+  // ニュース・アクションは既に描画されていればそのまま残す
+  // 何も描画されていない場合のみ隠す
+  if (!newsList.hasChildNodes()) {
+    newsSection.classList.add("hidden");
+  }
+  if (!actionsList.hasChildNodes()) {
+    actionsEl.classList.add("hidden");
+  }
 }
 
 // ============================================
