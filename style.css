@@ -1,3 +1,4 @@
+/* File: style.css */
 *,
 *::before,
 *::after {
@@ -123,6 +124,39 @@ img {
   z-index: 1;
 }
 
+/* ===== Heroバッジ ===== */
+
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 18px;
+
+  position: relative;
+  z-index: 1;
+}
+
+.badge {
+  display: inline-block;
+
+  background: rgba(255,255,255,0.18);
+
+  color: #fff;
+
+  padding: 5px 12px;
+
+  border-radius: 999px;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  border: 1px solid rgba(255,255,255,0.3);
+
+  backdrop-filter: blur(4px);
+}
+
 /* ===== Container ===== */
 
 .container {
@@ -145,7 +179,8 @@ img {
 .progress,
 .summary,
 .news-section,
-.actions {
+.actions,
+.agent-info {
   background: #fff;
 
   border-radius: 16px;
@@ -164,6 +199,28 @@ img {
 
 .control-panel {
   border: 1px solid rgba(102,126,234,0.08);
+}
+
+.panel-title {
+  margin-bottom: 18px;
+}
+
+.panel-title h2 {
+  color: #4a5568;
+
+  border-left: 4px solid #667eea;
+
+  padding-left: 12px;
+
+  margin-bottom: 8px;
+
+  line-height: 1.4;
+}
+
+.panel-title p {
+  color: #718096;
+
+  font-size: 0.92rem;
 }
 
 .control-row {
@@ -218,6 +275,33 @@ img {
 
   box-shadow:
     0 0 0 3px rgba(102,126,234,0.15);
+}
+
+/* ===== Notice ===== */
+
+.notice-box {
+  margin-top: 18px;
+
+  padding: 14px 16px;
+
+  background: rgba(102,126,234,0.06);
+
+  border-radius: 10px;
+
+  border-left: 3px solid #667eea;
+
+  color: #4a5568;
+
+  font-size: 0.9rem;
+}
+
+.notice-box ul {
+  padding-left: 20px;
+  margin-top: 6px;
+}
+
+.notice-box li {
+  margin-bottom: 4px;
 }
 
 /* ===== Button ===== */
@@ -287,10 +371,20 @@ img {
 
 /* ===== Section Titles ===== */
 
+.section-header h2 {
+  color: #4a5568;
+  border-left: 4px solid #667eea;
+  padding-left: 12px;
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
 .summary h2,
 .news-section h2,
 .actions h2,
-.progress h3 {
+.progress h2,
+.progress h3,
+.agent-info h2 {
   margin-bottom: 18px;
 
   color: #4a5568;
@@ -363,6 +457,36 @@ img {
   content: "✅";
 }
 
+/* ===== Agent Flow ===== */
+
+.agent-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  margin-top: 16px;
+}
+
+.flow-item {
+  flex: 1;
+  min-width: 120px;
+
+  background: rgba(102,126,234,0.06);
+
+  border: 1px solid rgba(102,126,234,0.15);
+
+  border-radius: 10px;
+
+  padding: 10px 12px;
+
+  text-align: center;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  color: #4a5568;
+}
+
 /* ===== Summary ===== */
 
 #summaryContent {
@@ -382,6 +506,44 @@ img {
 
   border:
     1px solid #edf2f7;
+}
+
+.summary-meta {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+}
+
+/* ===== News Toolbar ===== */
+
+.news-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 14px;
+
+  padding-bottom: 10px;
+
+  border-bottom: 1px dashed #e2e8f0;
+}
+
+.news-count {
+  font-weight: 700;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.news-count #newsCount {
+  color: #667eea;
+  font-size: 1.1rem;
+}
+
+.news-source {
+  font-size: 0.78rem;
+  color: #a0aec0;
 }
 
 /* ===== News List ===== */
@@ -523,6 +685,33 @@ img {
   overflow-wrap: anywhere;
 }
 
+/* ===== Agent Info ===== */
+
+.agent-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.agent-card {
+  background: #f7fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.agent-card h3 {
+  color: #4a5568;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.agent-card p {
+  color: #718096;
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
 /* ===== Footer ===== */
 
 footer {
@@ -534,6 +723,12 @@ footer {
   color: #a0aec0;
 
   font-size: 0.85rem;
+}
+
+.footer-note {
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #cbd5e0;
 }
 
 /* ===== エラーメッセージ ===== */
@@ -615,7 +810,8 @@ footer {
   .progress,
   .summary,
   .news-section,
-  .actions {
+  .actions,
+  .agent-info {
     padding: 20px;
   }
 
@@ -671,7 +867,8 @@ footer {
   .progress,
   .summary,
   .news-section,
-  .actions {
+  .actions,
+  .agent-info {
     padding: 16px;
 
     border-radius: 14px;
@@ -699,7 +896,9 @@ footer {
   .summary h2,
   .news-section h2,
   .actions h2,
-  .progress h3 {
+  .progress h2,
+  .progress h3,
+  .agent-info h2 {
     font-size: 1.05rem;
   }
 
