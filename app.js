@@ -36,10 +36,10 @@ let currentController = null;
 // ============================================
 const STEPS = [
   { id: "fetch",    label: "Step1: 外部ニュースソースから情報収集中..." },
-  { id: "cache",    label: "Step2: キャッシュ・過去分析データ確認中..." },
-  { id: "classify", label: "Step3: AIによるカテゴリ分類・重要度分析中..." },
-  { id: "analyze",  label: "Step4: SEOトレンドの統合分析中..." },
-  { id: "compose",  label: "Step5: 実行アクションプラン生成中..." }
+  { id: "dedup",    label: "Step2: 重複除去・ルールベース分類中..." },
+  { id: "classify", label: "Step3: カテゴリ判定・重要度スコアリング中..." },
+  { id: "analyze",  label: "Step4: Gemini AIによるSEOトレンド分析中..." },
+  { id: "compose",  label: "Step5: 推奨アクションプランを生成中..." }
 ];
 
 // ============================================
@@ -184,10 +184,11 @@ async function runAgent() {
 // 疑似進捗アニメーション
 // ============================================
 async function startProgressAnimation() {
+  const intervals = [1000, 1200, 1500, 4000, 6000];
   for (let i = 0; i < STEPS.length; i++) {
     if (!isRunning) return;
     renderProgress(i);
-    await sleep(900);
+    await sleep(intervals[i] || 1000);
   }
 }
 
