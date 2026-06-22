@@ -1,4 +1,3 @@
-// File: app.js
 const WORKER_URL = "https://seo-trend-agent.gmo-k-watanabe.workers.dev";
 
 // ============================================
