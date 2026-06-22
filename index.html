@@ -1,3 +1,5 @@
+<!-- Output: html -->
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -7,7 +9,6 @@
   <title>SEOトレンドアンテナAI</title>
 
   <meta name="description" content="SEO・Googleアルゴリズム・生成AI SEOの最新情報を自動収集し、AIが分析・優先順位付け・改善提案を行うSEO特化AIエージェント。" />
-
   <meta name="keywords" content="SEO,AIエージェント,Googleアルゴリズム,生成AI SEO,SEO分析,SEOニュース" />
 
   <meta property="og:title" content="SEOトレンドアンテナAI" />
@@ -56,7 +57,6 @@
 
       <div class="control-row">
         <label for="keyword">注目キーワード（任意）</label>
-
         <input
           type="text"
           id="keyword"
@@ -68,7 +68,6 @@
 
       <div class="control-row">
         <label for="category">カテゴリ</label>
-
         <select id="category">
           <option value="all">すべて</option>
           <option value="algorithm">アルゴリズム更新</option>
@@ -84,24 +83,21 @@
       </button>
 
       <div class="notice-box">
-        <p>
-          このAIエージェントは以下を自動実行します：
-        </p>
-
+        <p>このAIエージェントは以下を自動実行します：</p>
         <ul>
           <li>外部SEOニュースの収集（6ソース）</li>
-          <li>AIによるカテゴリ分類</li>
-          <li>重要トレンド分析</li>
+          <li>AIによるカテゴリ分類・重要度判定</li>
+          <li>重要トレンド分析（Gemini AI）</li>
           <li>SEO改善施策の提案</li>
-          <li>優先度判定</li>
+          <li>優先度判定・ソート</li>
         </ul>
       </div>
 
     </section>
 
-    <!-- エラー -->
+    <!-- エラーボックス（専用表示） -->
     <section id="errorBox" class="error-box hidden">
-      <h3>⚠️ エラー</h3>
+      <h3>⚠️ エラーが発生しました</h3>
       <p id="errorMessage"></p>
     </section>
 
@@ -115,25 +111,11 @@
       <ul id="progressList"></ul>
 
       <div class="agent-flow">
-        <div class="flow-item">
-          <span>① 外部収集</span>
-        </div>
-
-        <div class="flow-item">
-          <span>② 分類</span>
-        </div>
-
-        <div class="flow-item">
-          <span>③ 優先度判定</span>
-        </div>
-
-        <div class="flow-item">
-          <span>④ AI分析</span>
-        </div>
-
-        <div class="flow-item">
-          <span>⑤ 改善提案</span>
-        </div>
+        <div class="flow-item"><span>① 外部収集</span></div>
+        <div class="flow-item"><span>② 分類</span></div>
+        <div class="flow-item"><span>③ 優先度判定</span></div>
+        <div class="flow-item"><span>④ AI分析</span></div>
+        <div class="flow-item"><span>⑤ 改善提案</span></div>
       </div>
 
     </section>
@@ -173,11 +155,11 @@
 
         <div class="news-count">
           <span id="newsCount">0</span> 件取得
+          <span id="cacheLabel" class="cache-badge hidden">キャッシュ</span>
         </div>
 
         <div class="news-source">
-          Google News / Search Engine Journal /
-          Search Engine Land /
+          Google News (SEO / AI / Algorithm / E-E-A-T / Core Web Vitals) /
           Google Search Central
         </div>
 
@@ -199,24 +181,24 @@
         <div class="agent-card">
           <h3>外部ナレッジ収集</h3>
           <p>
-            複数のSEOニュースソースを巡回し、
-            最新情報を収集します。
+            6つのSEOニュースソースを並列巡回し、
+            最新情報をリアルタイム収集します。
           </p>
         </div>
 
         <div class="agent-card">
           <h3>AIカテゴリ分類</h3>
           <p>
-            Workers AI が記事内容を解析し、
-            SEOカテゴリへ自動分類します。
+            ルールベース＋Gemini AIがニュースを
+            SEOカテゴリへ自動分類・重要度判定します。
           </p>
         </div>
 
         <div class="agent-card">
           <h3>トレンド分析</h3>
           <p>
-            Gemini AI がSEOトレンドを分析し、
-            業界動向を要約します。
+            Gemini AIがSEOトレンドを分析し、
+            業界動向と今後の変化を要約します。
           </p>
         </div>
 
@@ -224,7 +206,7 @@
           <h3>改善提案生成</h3>
           <p>
             AIが実務ベースのSEO改善アクションを
-            自動生成します。
+            今すぐ実施できる形で自動生成します。
           </p>
         </div>
 
@@ -235,16 +217,12 @@
   </main>
 
   <footer>
-
     <div class="footer-inner">
-
       <p class="footer-note">
         SEO特化AIエージェント /
         完全無料構成
       </p>
-
     </div>
-
   </footer>
 
   <script src="app.js"></script>
