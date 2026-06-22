@@ -1,3 +1,45 @@
+/* File: style.css */
+
+/* ============================================
+   CSS変数（色・影・角丸を一元管理）
+   ============================================ */
+:root {
+  --brand-from:      #667eea;
+  --brand-to:        #764ba2;
+  --brand-mid:       #7167e8;
+
+  --bg-page:         #f0f2f8;
+  --bg-card:         #ffffff;
+  --bg-subtle:       #f7f9fc;
+
+  --text-primary:    #1a202c;
+  --text-secondary:  #4a5568;
+  --text-muted:      #718096;
+  --text-faint:      #a0aec0;
+
+  --border-default:  #e2e8f0;
+  --border-subtle:   #edf2f7;
+  --border-brand:    rgba(102, 126, 234, 0.25);
+
+  --shadow-xs:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.04);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+  --shadow-lg:  0 8px 28px rgba(0,0,0,0.10), 0 3px 10px rgba(0,0,0,0.05);
+  --shadow-xl:  0 16px 40px rgba(0,0,0,0.12), 0 6px 16px rgba(0,0,0,0.06);
+
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  16px;
+  --radius-xl:  20px;
+
+  --transition-fast:   0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-normal: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   リセット
+   ============================================ */
 *,
 *::before,
 *::after {
@@ -18,8 +60,9 @@ input, select, button {
   padding: 0;
 }
 
-/* ===== ベース ===== */
-
+/* ============================================
+   ベース
+   ============================================ */
 body {
   font-family:
     -apple-system,
@@ -28,15 +71,19 @@ body {
     "Hiragino Sans",
     "Yu Gothic UI",
     sans-serif;
-  background: #f5f7fa;
-  color: #2d3748;
+
+  background: var(--bg-page);
+  background-image:
+    radial-gradient(ellipse at 20% 0%,  rgba(102,126,234,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(118,75,162,0.06)  0%, transparent 50%);
+  background-attachment: fixed;
+
+  color: var(--text-primary);
   line-height: 1.7;
   min-height: 100vh;
   overflow-x: hidden;
   word-break: break-word;
 }
-
-/* ===== リンク ===== */
 
 a {
   color: inherit;
@@ -48,115 +95,177 @@ img {
   display: block;
 }
 
-/* ===== Hero ===== */
-
+/* ============================================
+   Hero
+   ============================================ */
 .hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background:
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
-  padding: 56px 24px 72px;
+  padding: 60px 24px 80px;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 
+/* メッシュ風オーバーレイ */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 15% 50%,  rgba(255,255,255,0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 15%,  rgba(255,255,255,0.12) 0%, transparent 35%),
+    radial-gradient(circle at 50% 100%, rgba(255,255,255,0.05) 0%, transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ノイズテクスチャ風 */
 .hero::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 40%);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   pointer-events: none;
+  z-index: 0;
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 1;
 }
 
 .hero h1 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   font-weight: 800;
-  margin-bottom: 12px;
-  letter-spacing: 0.02em;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.15);
 }
 
 .subtitle {
-  opacity: 0.92;
-  font-size: 1.02rem;
-  position: relative;
-  z-index: 1;
+  opacity: 0.9;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  max-width: 580px;
+  margin: 0 auto;
+  font-weight: 400;
 }
 
-/* ===== Heroバッジ ===== */
-
+/* ============================================
+   Hero バッジ
+   ============================================ */
 .hero-badges {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-  margin-top: 18px;
-  position: relative;
-  z-index: 1;
+  margin-top: 22px;
 }
 
 .badge {
   display: inline-block;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
-  padding: 5px 12px;
+  padding: 5px 14px;
   border-radius: 999px;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  border: 1px solid rgba(255,255,255,0.3);
-  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.28);
+  letter-spacing: 0.02em;
+  transition: background var(--transition-fast);
 }
 
-/* ===== Container ===== */
+.badge:hover {
+  background: rgba(255,255,255,0.22);
+}
 
+/* ============================================
+   Container
+   ============================================ */
 .container {
   width: 100%;
-  max-width: 980px;
-  margin: -36px auto 48px;
+  max-width: 1000px;
+  margin: -40px auto 56px;
   padding: 0 16px;
   position: relative;
   z-index: 5;
 }
 
-/* ===== 共通カード ===== */
-
+/* ============================================
+   共通カード
+   ============================================ */
 .control-panel,
 .progress,
 .summary,
 .news-section,
 .actions,
 .agent-info {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
-  padding: 24px;
-  margin-bottom: 24px;
+  background: var(--bg-card);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255,255,255,0.8);
+  padding: 28px;
+  margin-bottom: 20px;
   overflow: hidden;
+  transition: box-shadow var(--transition-normal);
 }
 
-/* ===== Control Panel ===== */
+.control-panel:hover,
+.summary:hover,
+.news-section:hover,
+.actions:hover {
+  box-shadow: var(--shadow-lg);
+}
 
+/* ============================================
+   Control Panel
+   ============================================ */
 .control-panel {
-  border: 1px solid rgba(102,126,234,0.08);
+  border: 1px solid var(--border-brand);
+  background:
+    linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
 }
 
 .panel-title {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .panel-title h2 {
-  color: #4a5568;
-  border-left: 4px solid #667eea;
-  padding-left: 12px;
-  margin-bottom: 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  margin-bottom: 6px;
   line-height: 1.4;
+  position: relative;
+}
+
+/* グラデーションアクセントライン */
+.panel-title h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-from), var(--brand-to));
 }
 
 .panel-title p {
-  color: #718096;
-  font-size: 0.92rem;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  padding-left: 14px;
 }
 
+/* ============================================
+   コントロール行
+   ============================================ */
 .control-row {
   display: flex;
   align-items: center;
@@ -166,9 +275,11 @@ img {
 }
 
 .control-row label {
-  min-width: 140px;
+  min-width: 150px;
   font-weight: 700;
-  color: #4a5568;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
 }
 
 .control-row input,
@@ -176,95 +287,170 @@ img {
   flex: 1;
   width: 100%;
   min-width: 200px;
-  padding: 12px 14px;
-  border: 1px solid #cbd5e0;
-  border-radius: 10px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-md);
   background: #fff;
-  font-size: 1rem;
+  font-size: 0.97rem;
+  color: var(--text-primary);
   transition:
-    border-color 0.2s,
-    box-shadow 0.2s,
-    background 0.2s;
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast),
+    background   var(--transition-fast);
+  outline: none;
+}
+
+.control-row input::placeholder {
+  color: var(--text-faint);
+}
+
+.control-row input:hover,
+.control-row select:hover {
+  border-color: rgba(102,126,234,0.4);
 }
 
 .control-row input:focus,
 .control-row select:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
+  border-color: var(--brand-from);
+  box-shadow:
+    0 0 0 3px rgba(102,126,234,0.12),
+    0 1px 4px rgba(102,126,234,0.08);
+  background: #fdfeff;
 }
 
-/* ===== Notice ===== */
-
+/* ============================================
+   Notice Box
+   ============================================ */
 .notice-box {
-  margin-top: 18px;
+  margin-top: 20px;
   padding: 14px 16px;
-  background: rgba(102,126,234,0.06);
-  border-radius: 10px;
-  border-left: 3px solid #667eea;
-  color: #4a5568;
-  font-size: 0.9rem;
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.04));
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--brand-from);
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+
+.notice-box p {
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 .notice-box ul {
-  padding-left: 20px;
+  padding-left: 18px;
   margin-top: 6px;
 }
 
 .notice-box li {
-  margin-bottom: 4px;
+  margin-bottom: 3px;
+  color: var(--text-muted);
 }
 
-/* ===== Button ===== */
-
+/* ============================================
+   ボタン
+   ============================================ */
 .btn-primary {
   width: 100%;
   border: none;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   padding: 15px 18px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background:
+    linear-gradient(135deg, #667eea 0%, #7b5fdc 50%, #764ba2 100%);
+  background-size: 200% 200%;
+  background-position: 0% 50%;
   color: #fff;
-  font-size: 1.05rem;
+  font-size: 1.0rem;
   font-weight: 800;
+  letter-spacing: 0.02em;
   cursor: pointer;
-  transition:
-    transform 0.18s ease,
-    opacity 0.2s ease,
-    box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
   margin-top: 8px;
-  box-shadow: 0 6px 18px rgba(102,126,234,0.25);
+  box-shadow:
+    0 4px 14px rgba(102,126,234,0.35),
+    0 1px 4px  rgba(102,126,234,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  transition:
+    background-position var(--transition-slow),
+    transform  var(--transition-fast),
+    box-shadow var(--transition-normal);
+}
+
+/* 光沢レイヤー */
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255,255,255,0.18) 50%,
+    transparent 80%
+  );
+  transition: left 0.55s ease;
+  pointer-events: none;
+}
+
+.btn-primary:hover::before {
+  left: 150%;
 }
 
 .btn-primary:hover {
+  background-position: 100% 50%;
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(102,126,234,0.28);
+  box-shadow:
+    0 8px 24px rgba(102,126,234,0.40),
+    0 3px 8px  rgba(102,126,234,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
 .btn-primary:active {
   transform: translateY(0);
+  box-shadow:
+    0 2px 8px rgba(102,126,234,0.30),
+    inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .btn-primary:disabled {
-  opacity: 0.65;
+  opacity: 0.6;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* ===== hidden ===== */
-
+/* ============================================
+   hidden
+   ============================================ */
 .hidden {
   display: none !important;
 }
 
-/* ===== Section Titles ===== */
-
+/* ============================================
+   セクション見出し（共通）
+   ============================================ */
 .section-header h2 {
-  color: #4a5568;
-  border-left: 4px solid #667eea;
-  padding-left: 12px;
-  margin-bottom: 18px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  margin-bottom: 20px;
   line-height: 1.4;
+  position: relative;
+}
+
+.section-header h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-from), var(--brand-to));
 }
 
 .summary h2,
@@ -273,17 +459,59 @@ img {
 .progress h2,
 .progress h3,
 .agent-info h2 {
-  margin-bottom: 18px;
-  color: #4a5568;
-  border-left: 4px solid #667eea;
-  padding-left: 12px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  margin-bottom: 20px;
   line-height: 1.4;
+  position: relative;
 }
 
-/* ===== Progress ===== */
+.summary h2::before,
+.news-section h2::before,
+.actions h2::before,
+.progress h2::before,
+.progress h3::before,
+.agent-info h2::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--brand-from), var(--brand-to));
+}
 
+/* ============================================
+   エラーボックス
+   ============================================ */
+.error-box {
+  background:
+    linear-gradient(135deg, #fff5f5, #fff8f8);
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 20px;
+  line-height: 1.7;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.08);
+}
+
+.error-box h3 {
+  margin-bottom: 6px;
+  font-size: 0.97rem;
+  font-weight: 700;
+}
+
+/* ============================================
+   Progress
+   ============================================ */
 .progress {
   position: relative;
+  background:
+    linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
 }
 
 #progressList {
@@ -292,13 +520,18 @@ img {
 
 #progressList li {
   position: relative;
-  padding: 12px 12px 12px 42px;
-  border-bottom: 1px solid #edf2f7;
-  color: #4a5568;
-  min-height: 44px;
+  padding: 13px 14px 13px 46px;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  min-height: 46px;
   display: flex;
   align-items: center;
-  transition: background 0.2s ease;
+  font-size: 0.93rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 2px;
+  transition:
+    background var(--transition-fast),
+    color    var(--transition-fast);
 }
 
 #progressList li:last-child {
@@ -306,299 +539,446 @@ img {
 }
 
 #progressList li.running {
-  background: rgba(102,126,234,0.06);
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.07), rgba(118,75,162,0.04));
   font-weight: 700;
+  color: var(--brand-from);
 }
 
 #progressList li.done {
-  color: #2f855a;
+  color: #276749;
 }
 
 #progressList li::before {
   position: absolute;
   left: 14px;
-  font-size: 1rem;
+  font-size: 1.0rem;
 }
 
+/* ドットアニメーション（running） */
 #progressList li.running::before {
   content: "⏳";
+  animation: spinPulse 1.4s ease-in-out infinite;
 }
 
 #progressList li.done::before {
   content: "✅";
 }
 
-/* ===== Agent Flow ===== */
+@keyframes spinPulse {
+  0%, 100% { opacity: 0.6; transform: scale(0.9);  }
+  50%       { opacity: 1.0; transform: scale(1.05); }
+}
 
+/* ============================================
+   Agent Flow
+   ============================================ */
 .agent-flow {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: 18px;
 }
 
 .flow-item {
   flex: 1;
-  min-width: 120px;
-  background: rgba(102,126,234,0.06);
-  border: 1px solid rgba(102,126,234,0.15);
-  border-radius: 10px;
+  min-width: 110px;
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.06), rgba(118,75,162,0.04));
+  border: 1px solid rgba(102,126,234,0.14);
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   text-align: center;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #4a5568;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+  transition: background var(--transition-fast);
 }
 
-/* ===== Summary ===== */
+.flow-item:hover {
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.12), rgba(118,75,162,0.08));
+}
 
+/* ============================================
+   Summary
+   ============================================ */
 #summaryContent {
-  background: #f7fafc;
-  border-radius: 12px;
-  padding: 18px;
+  background:
+    linear-gradient(145deg, #f8faff 0%, #f5f7fb 100%);
+  border-radius: var(--radius-md);
+  padding: 20px;
   line-height: 2.0;
-  color: #2d3748;
+  color: var(--text-primary);
+  font-size: 0.97rem;
   white-space: pre-wrap;
   overflow-wrap: anywhere;
-  border: 1px solid #edf2f7;
-  font-size: 0.97rem;
+  border: 1px solid var(--border-subtle);
+  box-shadow: inset 0 1px 4px rgba(0,0,0,0.03);
 }
 
 .summary-meta {
-  color: #718096;
-  font-size: 0.85rem;
-  margin-bottom: 10px;
   display: flex;
   align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-bottom: 12px;
 }
 
-/* ===== キャッシュバッジ ===== */
-
+/* ============================================
+   キャッシュバッジ
+   ============================================ */
 .cache-badge {
-  display: inline-block;
-  background: #ebf4ff;
-  color: #2b6cb0;
-  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background:
+    linear-gradient(135deg, #ebf4ff, #e8f0ff);
+  color: #2563eb;
+  font-size: 0.70rem;
   font-weight: 700;
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
-  border: 1px solid #bee3f8;
-  margin-left: 6px;
+  border: 1px solid #bfdbfe;
+  letter-spacing: 0.03em;
   vertical-align: middle;
 }
 
-/* ===== News Toolbar ===== */
-
+/* ============================================
+   News Toolbar
+   ============================================ */
 .news-toolbar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px dashed #e2e8f0;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .news-count {
   font-weight: 700;
-  color: #4a5568;
-  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-size: 0.93rem;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: 6px;
 }
 
 .news-count #newsCount {
-  color: #667eea;
-  font-size: 1.1rem;
+  color: var(--brand-from);
+  font-size: 1.15rem;
+  font-weight: 800;
 }
 
 .news-source {
-  font-size: 0.78rem;
-  color: #a0aec0;
+  font-size: 0.76rem;
+  color: var(--text-faint);
+  letter-spacing: 0.01em;
 }
 
-/* ===== News List ===== */
-
+/* ============================================
+   News List
+   ============================================ */
 .news-list {
   display: grid;
-  gap: 14px;
+  gap: 12px;
 }
 
 .news-item {
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 18px;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    border-color 0.18s ease;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
   background: #fff;
   overflow: hidden;
+  position: relative;
+  transition:
+    transform   var(--transition-normal),
+    box-shadow  var(--transition-normal),
+    border-color var(--transition-normal);
+}
+
+.news-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--brand-from), var(--brand-to));
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  border-radius: 999px 0 0 999px;
 }
 
 .news-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-  border-color: rgba(102,126,234,0.35);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(102,126,234,0.3);
+}
+
+.news-item:hover::before {
+  opacity: 1;
 }
 
 .news-item h3 {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
+  font-weight: 700;
   line-height: 1.6;
   margin-bottom: 8px;
   overflow-wrap: anywhere;
 }
 
 .news-item h3 a {
-  color: #2b6cb0;
+  color: #1d4ed8;
+  transition: color var(--transition-fast);
 }
 
 .news-item h3 a:hover {
+  color: var(--brand-from);
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
+/* ============================================
+   News Meta
+   ============================================ */
 .news-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
-  font-size: 0.84rem;
-  color: #718096;
+  font-size: 0.82rem;
+  color: var(--text-muted);
   margin-bottom: 10px;
 }
 
 .news-tag {
   display: inline-flex;
   align-items: center;
-  background: #edf2f7;
-  color: #4a5568;
-  padding: 3px 10px;
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.07));
+  color: #5a4fcf;
+  padding: 2px 10px;
   border-radius: 999px;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 700;
   white-space: nowrap;
+  border: 1px solid rgba(102,126,234,0.15);
+  letter-spacing: 0.02em;
 }
 
-/* ===== AI重要度装飾 ===== */
-
+/* ============================================
+   重要度装飾
+   ============================================ */
 .news-item.high-priority {
-  border-color: rgba(245,101,101,0.4);
-  background: linear-gradient(to bottom, rgba(245,101,101,0.03), #fff);
+  border-color: rgba(239,68,68,0.3);
+  background:
+    linear-gradient(to bottom right, rgba(254,242,242,0.6), #fff);
+}
+
+.news-item.high-priority::before {
+  background: linear-gradient(180deg, #f87171, #ef4444);
 }
 
 .news-item.medium-priority {
-  border-color: rgba(236,201,75,0.45);
+  border-color: rgba(245,158,11,0.35);
+  background:
+    linear-gradient(to bottom right, rgba(255,251,235,0.5), #fff);
+}
+
+.news-item.medium-priority::before {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
 }
 
 .news-item.low-priority {
-  border-color: rgba(72,187,120,0.3);
+  border-color: rgba(52,211,153,0.3);
+  background:
+    linear-gradient(to bottom right, rgba(240,253,250,0.5), #fff);
 }
 
-/* ===== News Summary ===== */
+.news-item.low-priority::before {
+  background: linear-gradient(180deg, #34d399, #10b981);
+}
 
+/* ============================================
+   News Summary
+   ============================================ */
 .news-summary {
-  color: #4a5568;
-  font-size: 0.95rem;
-  line-height: 1.75;
+  color: var(--text-secondary);
+  font-size: 0.92rem;
+  line-height: 1.78;
   overflow-wrap: anywhere;
 }
 
-/* ===== Actions ===== */
-
+/* ============================================
+   Actions
+   ============================================ */
 #actionsList {
-  padding-left: 24px;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: actions-counter;
 }
 
 #actionsList li {
-  margin-bottom: 14px;
-  line-height: 1.8;
+  counter-increment: actions-counter;
+  margin-bottom: 12px;
+  line-height: 1.75;
   overflow-wrap: anywhere;
+  padding: 14px 16px 14px 52px;
+  border-radius: var(--radius-md);
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  position: relative;
+  transition:
+    background   var(--transition-fast),
+    border-color var(--transition-fast),
+    transform    var(--transition-fast);
 }
 
-/* ===== Agent Info ===== */
+#actionsList li::before {
+  counter-content: counter(actions-counter);
+  content: counter(actions-counter);
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, var(--brand-from), var(--brand-to));
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+  /* flex代替 */
+  text-align: center;
+  padding-top: 5px;
+  box-sizing: border-box;
+}
+
+#actionsList li:hover {
+  background:
+    linear-gradient(135deg, rgba(102,126,234,0.05), rgba(118,75,162,0.03));
+  border-color: rgba(102,126,234,0.2);
+  transform: translateX(3px);
+}
+
+#actionsList li:last-child {
+  margin-bottom: 0;
+}
+
+/* ============================================
+   Agent Info
+   ============================================ */
+.agent-info {
+  background:
+    linear-gradient(145deg, #ffffff 0%, #fafbff 100%);
+}
 
 .agent-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   gap: 14px;
 }
 
 .agent-card {
-  background: #f7fafc;
-  border: 1px solid #edf2f7;
-  border-radius: 12px;
-  padding: 16px;
+  background:
+    linear-gradient(145deg, #f8faff 0%, #f2f5fd 100%);
+  border: 1px solid rgba(102,126,234,0.12);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  transition:
+    box-shadow var(--transition-normal),
+    transform  var(--transition-normal),
+    border-color var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.agent-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background:
+    radial-gradient(circle, rgba(102,126,234,0.08), transparent 70%);
+  border-radius: 0 var(--radius-lg) 0 100%;
+}
+
+.agent-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: rgba(102,126,234,0.25);
 }
 
 .agent-card h3 {
-  color: #4a5568;
-  font-size: 1rem;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  font-weight: 700;
   margin-bottom: 8px;
+  letter-spacing: 0.01em;
 }
 
 .agent-card p {
-  color: #718096;
-  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-size: 0.86rem;
   line-height: 1.7;
 }
 
-/* ===== Footer ===== */
-
+/* ============================================
+   Footer
+   ============================================ */
 footer {
   text-align: center;
-  padding: 28px 16px;
-  color: #a0aec0;
-  font-size: 0.85rem;
+  padding: 32px 16px;
+  color: var(--text-faint);
+  font-size: 0.84rem;
+  border-top: 1px solid var(--border-subtle);
 }
 
 .footer-note {
   margin-top: 6px;
-  font-size: 0.78rem;
-  color: #cbd5e0;
+  font-size: 0.76rem;
+  color: #d1d5db;
+  letter-spacing: 0.03em;
 }
 
-/* ===== エラーボックス ===== */
-
-.error-box {
-  background: #fff5f5;
-  border: 1px solid #feb2b2;
-  color: #c53030;
-  padding: 16px 18px;
-  border-radius: 10px;
-  margin-bottom: 24px;
-  line-height: 1.7;
-}
-
-.error-box h3 {
-  margin-bottom: 6px;
-  font-size: 1rem;
-}
-
-/* ===== Loading Animation ===== */
-
+/* ============================================
+   Loading Animation
+   ============================================ */
 .loading-pulse {
   animation: pulseGlow 1.5s infinite ease-in-out;
 }
 
 @keyframes pulseGlow {
-  0%   { opacity: 0.6; }
-  50%  { opacity: 1;   }
-  100% { opacity: 0.6; }
+  0%, 100% { opacity: 0.55; }
+  50%       { opacity: 1.0;  }
 }
 
-/* ===== スクロールバー ===== */
-
+/* ============================================
+   スクロールバー
+   ============================================ */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(102,126,234,0.35);
+  background:
+    linear-gradient(180deg, var(--brand-from), var(--brand-to));
   border-radius: 999px;
 }
 
@@ -606,119 +986,173 @@ footer {
   background: transparent;
 }
 
-/* ===== タブレット ===== */
-
+/* ============================================
+   タブレット（〜768px）
+   ============================================ */
 @media (max-width: 768px) {
   .hero {
-    padding: 48px 20px 64px;
+    padding: 50px 20px 68px;
   }
+
   .hero h1 {
-    font-size: 1.8rem;
+    font-size: 1.9rem;
   }
+
   .container {
-    margin-top: -28px;
+    margin-top: -30px;
   }
+
   .control-panel,
   .progress,
   .summary,
   .news-section,
   .actions,
   .agent-info {
-    padding: 20px;
+    padding: 22px;
+    border-radius: var(--radius-lg);
   }
+
   .control-row {
     gap: 10px;
   }
+
   .control-row label {
     min-width: 100%;
   }
+
   .news-meta {
     align-items: flex-start;
   }
 }
 
-/* ===== スマホ最適化 ===== */
-
+/* ============================================
+   スマホ（〜600px）
+   ============================================ */
 @media (max-width: 600px) {
   body {
     font-size: 15px;
   }
+
   .hero {
-    padding: 40px 16px 56px;
+    padding: 42px 16px 58px;
   }
+
   .hero h1 {
-    font-size: 1.45rem;
-    line-height: 1.5;
+    font-size: 1.5rem;
+    line-height: 1.4;
   }
+
   .subtitle {
-    font-size: 0.94rem;
-    line-height: 1.7;
+    font-size: 0.93rem;
+    line-height: 1.75;
   }
+
   .container {
-    margin: -24px auto 40px;
+    margin: -26px auto 40px;
     padding: 0 12px;
   }
+
   .control-panel,
   .progress,
   .summary,
   .news-section,
   .actions,
   .agent-info {
-    padding: 16px;
-    border-radius: 14px;
+    padding: 18px;
+    border-radius: var(--radius-lg);
   }
+
   .control-row {
     margin-bottom: 14px;
   }
+
   .control-row input,
   .control-row select {
     min-width: 100%;
-    font-size: 16px;
+    font-size: 16px; /* iOS ズーム防止 */
   }
+
   .btn-primary {
-    font-size: 1rem;
+    font-size: 0.98rem;
     padding: 14px 16px;
   }
+
+  .section-header h2,
   .summary h2,
   .news-section h2,
   .actions h2,
   .progress h2,
-  .progress h3,
   .agent-info h2 {
-    font-size: 1.05rem;
+    font-size: 1.0rem;
   }
+
   .news-item {
-    padding: 15px;
+    padding: 15px 16px;
+    border-radius: var(--radius-md);
   }
+
   .news-item h3 {
-    font-size: 0.98rem;
+    font-size: 0.97rem;
   }
+
   .news-summary {
-    font-size: 0.92rem;
+    font-size: 0.90rem;
   }
+
   #progressList li {
-    padding: 12px 10px 12px 38px;
-    font-size: 0.92rem;
+    padding: 12px 10px 12px 40px;
+    font-size: 0.90rem;
   }
+
+  #actionsList li {
+    padding: 12px 14px 12px 46px;
+    font-size: 0.90rem;
+  }
+
+  .agent-grid {
+    grid-template-columns: 1fr;
+  }
+
   footer {
     font-size: 0.78rem;
     line-height: 1.6;
   }
 }
 
-/* ===== 極小端末 ===== */
-
+/* ============================================
+   極小端末（〜380px）
+   ============================================ */
 @media (max-width: 380px) {
   .hero h1 {
-    font-size: 1.25rem;
+    font-size: 1.28rem;
   }
+
   .subtitle {
     font-size: 0.88rem;
   }
+
   .btn-primary {
-    font-size: 0.94rem;
+    font-size: 0.93rem;
   }
+
   .news-item h3 {
     font-size: 0.92rem;
+  }
+
+  .badge {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+  }
+}
+
+/* ============================================
+   アクセシビリティ：モーション低減設定への対応
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
   }
 }
