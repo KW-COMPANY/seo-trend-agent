@@ -1,3 +1,4 @@
+/* File: style.css */
 *,
 *::before,
 *::after {
@@ -10,21 +11,10 @@ html {
 }
 
 body,
-h1,
-h2,
-h3,
-p,
-ul,
-ol,
-li,
-section,
-header,
-footer,
-main,
-div,
-input,
-select,
-button {
+h1, h2, h3,
+p, ul, ol, li,
+section, header, footer, main, div,
+input, select, button {
   margin: 0;
   padding: 0;
 }
@@ -39,13 +29,10 @@ body {
     "Hiragino Sans",
     "Yu Gothic UI",
     sans-serif;
-
   background: #f5f7fa;
   color: #2d3748;
   line-height: 1.7;
-
   min-height: 100vh;
-
   overflow-x: hidden;
   word-break: break-word;
 }
@@ -65,60 +52,34 @@ img {
 /* ===== Hero ===== */
 
 .hero {
-  background:
-    linear-gradient(
-      135deg,
-      #667eea 0%,
-      #764ba2 100%
-    );
-
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #fff;
-
-  padding:
-    56px
-    24px
-    72px;
-
+  padding: 56px 24px 72px;
   text-align: center;
-
   position: relative;
-
   overflow: hidden;
 }
 
 .hero::after {
   content: "";
-
   position: absolute;
   inset: 0;
-
-  background:
-    radial-gradient(
-      circle at top right,
-      rgba(255,255,255,0.15),
-      transparent 40%
-    );
-
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.15), transparent 40%);
   pointer-events: none;
 }
 
 .hero h1 {
   font-size: 2.2rem;
   font-weight: 800;
-
   margin-bottom: 12px;
-
   letter-spacing: 0.02em;
-
   position: relative;
   z-index: 1;
 }
 
 .subtitle {
   opacity: 0.92;
-
   font-size: 1.02rem;
-
   position: relative;
   z-index: 1;
 }
@@ -130,29 +91,20 @@ img {
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
-
   margin-top: 18px;
-
   position: relative;
   z-index: 1;
 }
 
 .badge {
   display: inline-block;
-
   background: rgba(255,255,255,0.18);
-
   color: #fff;
-
   padding: 5px 12px;
-
   border-radius: 999px;
-
   font-size: 0.78rem;
   font-weight: 600;
-
   border: 1px solid rgba(255,255,255,0.3);
-
   backdrop-filter: blur(4px);
 }
 
@@ -161,13 +113,8 @@ img {
 .container {
   width: 100%;
   max-width: 980px;
-
-  margin:
-    -36px auto 48px;
-
-  padding:
-    0 16px;
-
+  margin: -36px auto 48px;
+  padding: 0 16px;
   position: relative;
   z-index: 5;
 }
@@ -181,16 +128,10 @@ img {
 .actions,
 .agent-info {
   background: #fff;
-
   border-radius: 16px;
-
-  box-shadow:
-    0 4px 18px rgba(0,0,0,0.08);
-
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
   padding: 24px;
-
   margin-bottom: 24px;
-
   overflow: hidden;
 }
 
@@ -206,19 +147,14 @@ img {
 
 .panel-title h2 {
   color: #4a5568;
-
   border-left: 4px solid #667eea;
-
   padding-left: 12px;
-
   margin-bottom: 8px;
-
   line-height: 1.4;
 }
 
 .panel-title p {
   color: #718096;
-
   font-size: 0.92rem;
 }
 
@@ -226,40 +162,26 @@ img {
   display: flex;
   align-items: center;
   gap: 12px;
-
   margin-bottom: 16px;
-
   flex-wrap: wrap;
 }
 
 .control-row label {
   min-width: 140px;
-
   font-weight: 700;
-
   color: #4a5568;
 }
 
 .control-row input,
 .control-row select {
   flex: 1;
-
   width: 100%;
   min-width: 200px;
-
-  padding:
-    12px
-    14px;
-
-  border:
-    1px solid #cbd5e0;
-
+  padding: 12px 14px;
+  border: 1px solid #cbd5e0;
   border-radius: 10px;
-
   background: #fff;
-
   font-size: 1rem;
-
   transition:
     border-color 0.2s,
     box-shadow 0.2s,
@@ -269,28 +191,19 @@ img {
 .control-row input:focus,
 .control-row select:focus {
   outline: none;
-
   border-color: #667eea;
-
-  box-shadow:
-    0 0 0 3px rgba(102,126,234,0.15);
+  box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
 }
 
 /* ===== Notice ===== */
 
 .notice-box {
   margin-top: 18px;
-
   padding: 14px 16px;
-
   background: rgba(102,126,234,0.06);
-
   border-radius: 10px;
-
   border-left: 3px solid #667eea;
-
   color: #4a5568;
-
   font-size: 0.9rem;
 }
 
@@ -307,45 +220,25 @@ img {
 
 .btn-primary {
   width: 100%;
-
   border: none;
-
   border-radius: 10px;
-
-  padding:
-    15px
-    18px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #667eea,
-      #764ba2
-    );
-
+  padding: 15px 18px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
   color: #fff;
-
   font-size: 1.05rem;
   font-weight: 800;
-
   cursor: pointer;
-
   transition:
     transform 0.18s ease,
     opacity 0.2s ease,
     box-shadow 0.2s ease;
-
   margin-top: 8px;
-
-  box-shadow:
-    0 6px 18px rgba(102,126,234,0.25);
+  box-shadow: 0 6px 18px rgba(102,126,234,0.25);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 10px 22px rgba(102,126,234,0.28);
+  box-shadow: 0 10px 22px rgba(102,126,234,0.28);
 }
 
 .btn-primary:active {
@@ -354,15 +247,12 @@ img {
 
 .btn-primary:disabled {
   opacity: 0.65;
-
   cursor: not-allowed;
-
   transform: none;
-
   box-shadow: none;
 }
 
-/* ===== hidden対策 ===== */
+/* ===== hidden ===== */
 
 .hidden {
   display: none !important;
@@ -385,14 +275,9 @@ img {
 .progress h3,
 .agent-info h2 {
   margin-bottom: 18px;
-
   color: #4a5568;
-
-  border-left:
-    4px solid #667eea;
-
+  border-left: 4px solid #667eea;
   padding-left: 12px;
-
   line-height: 1.4;
 }
 
@@ -408,22 +293,13 @@ img {
 
 #progressList li {
   position: relative;
-
-  padding:
-    12px 12px 12px 42px;
-
-  border-bottom:
-    1px solid #edf2f7;
-
+  padding: 12px 12px 12px 42px;
+  border-bottom: 1px solid #edf2f7;
   color: #4a5568;
-
   min-height: 44px;
-
   display: flex;
   align-items: center;
-
-  transition:
-    background 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 #progressList li:last-child {
@@ -431,9 +307,7 @@ img {
 }
 
 #progressList li.running {
-  background:
-    rgba(102,126,234,0.06);
-
+  background: rgba(102,126,234,0.06);
   font-weight: 700;
 }
 
@@ -444,7 +318,6 @@ img {
 #progressList li::before {
   position: absolute;
   left: 14px;
-
   font-size: 1rem;
 }
 
@@ -462,27 +335,19 @@ img {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-
   margin-top: 16px;
 }
 
 .flow-item {
   flex: 1;
   min-width: 120px;
-
   background: rgba(102,126,234,0.06);
-
   border: 1px solid rgba(102,126,234,0.15);
-
   border-radius: 10px;
-
   padding: 10px 12px;
-
   text-align: center;
-
   font-size: 0.85rem;
   font-weight: 600;
-
   color: #4a5568;
 }
 
@@ -490,27 +355,39 @@ img {
 
 #summaryContent {
   background: #f7fafc;
-
   border-radius: 12px;
-
   padding: 18px;
-
-  line-height: 1.9;
-
+  line-height: 2.0;
   color: #2d3748;
-
   white-space: pre-wrap;
-
   overflow-wrap: anywhere;
-
-  border:
-    1px solid #edf2f7;
+  border: 1px solid #edf2f7;
+  font-size: 0.97rem;
 }
 
 .summary-meta {
   color: #718096;
   font-size: 0.85rem;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===== キャッシュバッジ ===== */
+
+.cache-badge {
+  display: inline-block;
+  background: #ebf4ff;
+  color: #2b6cb0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid #bee3f8;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 /* ===== News Toolbar ===== */
@@ -521,11 +398,8 @@ img {
   align-items: center;
   justify-content: space-between;
   gap: 10px;
-
   margin-bottom: 14px;
-
   padding-bottom: 10px;
-
   border-bottom: 1px dashed #e2e8f0;
 }
 
@@ -533,6 +407,10 @@ img {
   font-weight: 700;
   color: #4a5568;
   font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .news-count #newsCount {
@@ -549,45 +427,31 @@ img {
 
 .news-list {
   display: grid;
-
   gap: 14px;
 }
 
 .news-item {
-  border:
-    1px solid #e2e8f0;
-
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
-
   padding: 18px;
-
   transition:
     transform 0.18s ease,
     box-shadow 0.18s ease,
     border-color 0.18s ease;
-
   background: #fff;
-
   overflow: hidden;
 }
 
 .news-item:hover {
   transform: translateY(-2px);
-
-  box-shadow:
-    0 8px 20px rgba(0,0,0,0.08);
-
-  border-color:
-    rgba(102,126,234,0.35);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  border-color: rgba(102,126,234,0.35);
 }
 
 .news-item h3 {
   font-size: 1.05rem;
-
   line-height: 1.6;
-
   margin-bottom: 8px;
-
   overflow-wrap: anywhere;
 }
 
@@ -602,71 +466,46 @@ img {
 .news-meta {
   display: flex;
   flex-wrap: wrap;
-
   gap: 8px;
-
   align-items: center;
-
   font-size: 0.84rem;
-
   color: #718096;
-
   margin-bottom: 10px;
 }
 
 .news-tag {
   display: inline-flex;
   align-items: center;
-
   background: #edf2f7;
-
   color: #4a5568;
-
-  padding:
-    3px 10px;
-
+  padding: 3px 10px;
   border-radius: 999px;
-
   font-size: 0.74rem;
-
   font-weight: 700;
-
   white-space: nowrap;
 }
 
 /* ===== AI重要度装飾 ===== */
 
 .news-item.high-priority {
-  border-color:
-    rgba(245,101,101,0.4);
-
-  background:
-    linear-gradient(
-      to bottom,
-      rgba(245,101,101,0.03),
-      #fff
-    );
+  border-color: rgba(245,101,101,0.4);
+  background: linear-gradient(to bottom, rgba(245,101,101,0.03), #fff);
 }
 
 .news-item.medium-priority {
-  border-color:
-    rgba(236,201,75,0.45);
+  border-color: rgba(236,201,75,0.45);
 }
 
 .news-item.low-priority {
-  border-color:
-    rgba(72,187,120,0.3);
+  border-color: rgba(72,187,120,0.3);
 }
 
 /* ===== News Summary ===== */
 
 .news-summary {
   color: #4a5568;
-
   font-size: 0.95rem;
-
   line-height: 1.75;
-
   overflow-wrap: anywhere;
 }
 
@@ -678,9 +517,7 @@ img {
 
 #actionsList li {
   margin-bottom: 14px;
-
   line-height: 1.8;
-
   overflow-wrap: anywhere;
 }
 
@@ -715,12 +552,8 @@ img {
 
 footer {
   text-align: center;
-
-  padding:
-    28px 16px;
-
+  padding: 28px 16px;
   color: #a0aec0;
-
   font-size: 0.85rem;
 }
 
@@ -730,44 +563,33 @@ footer {
   color: #cbd5e0;
 }
 
-/* ===== エラーメッセージ ===== */
+/* ===== エラーボックス ===== */
 
 .error-box {
   background: #fff5f5;
-
-  border:
-    1px solid #feb2b2;
-
+  border: 1px solid #feb2b2;
   color: #c53030;
-
-  padding: 14px;
-
+  padding: 16px 18px;
   border-radius: 10px;
+  margin-bottom: 24px;
+  line-height: 1.7;
+}
 
-  margin-top: 16px;
-
-  line-height: 1.6;
+.error-box h3 {
+  margin-bottom: 6px;
+  font-size: 1rem;
 }
 
 /* ===== Loading Animation ===== */
 
 .loading-pulse {
-  animation:
-    pulseGlow 1.5s infinite ease-in-out;
+  animation: pulseGlow 1.5s infinite ease-in-out;
 }
 
 @keyframes pulseGlow {
-  0% {
-    opacity: 0.6;
-  }
-
-  50% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0.6;
-  }
+  0%   { opacity: 0.6; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.6; }
 }
 
 /* ===== スクロールバー ===== */
@@ -778,7 +600,6 @@ footer {
 
 ::-webkit-scrollbar-thumb {
   background: rgba(102,126,234,0.35);
-
   border-radius: 999px;
 }
 
@@ -789,22 +610,15 @@ footer {
 /* ===== タブレット ===== */
 
 @media (max-width: 768px) {
-
   .hero {
-    padding:
-      48px
-      20px
-      64px;
+    padding: 48px 20px 64px;
   }
-
   .hero h1 {
     font-size: 1.8rem;
   }
-
   .container {
     margin-top: -28px;
   }
-
   .control-panel,
   .progress,
   .summary,
@@ -813,15 +627,12 @@ footer {
   .agent-info {
     padding: 20px;
   }
-
   .control-row {
     gap: 10px;
   }
-
   .control-row label {
     min-width: 100%;
   }
-
   .news-meta {
     align-items: flex-start;
   }
@@ -830,38 +641,24 @@ footer {
 /* ===== スマホ最適化 ===== */
 
 @media (max-width: 600px) {
-
   body {
     font-size: 15px;
   }
-
   .hero {
-    padding:
-      40px
-      16px
-      56px;
+    padding: 40px 16px 56px;
   }
-
   .hero h1 {
     font-size: 1.45rem;
-
     line-height: 1.5;
   }
-
   .subtitle {
     font-size: 0.94rem;
-
     line-height: 1.7;
   }
-
   .container {
-    margin:
-      -24px auto 40px;
-
-    padding:
-      0 12px;
+    margin: -24px auto 40px;
+    padding: 0 12px;
   }
-
   .control-panel,
   .progress,
   .summary,
@@ -869,29 +666,20 @@ footer {
   .actions,
   .agent-info {
     padding: 16px;
-
     border-radius: 14px;
   }
-
   .control-row {
     margin-bottom: 14px;
   }
-
   .control-row input,
   .control-row select {
     min-width: 100%;
-
     font-size: 16px;
   }
-
   .btn-primary {
     font-size: 1rem;
-
-    padding:
-      14px
-      16px;
+    padding: 14px 16px;
   }
-
   .summary h2,
   .news-section h2,
   .actions h2,
@@ -900,32 +688,21 @@ footer {
   .agent-info h2 {
     font-size: 1.05rem;
   }
-
   .news-item {
     padding: 15px;
   }
-
   .news-item h3 {
     font-size: 0.98rem;
   }
-
   .news-summary {
     font-size: 0.92rem;
   }
-
   #progressList li {
-    padding:
-      12px
-      10px
-      12px
-      38px;
-
+    padding: 12px 10px 12px 38px;
     font-size: 0.92rem;
   }
-
   footer {
     font-size: 0.78rem;
-
     line-height: 1.6;
   }
 }
@@ -933,19 +710,15 @@ footer {
 /* ===== 極小端末 ===== */
 
 @media (max-width: 380px) {
-
   .hero h1 {
     font-size: 1.25rem;
   }
-
   .subtitle {
     font-size: 0.88rem;
   }
-
   .btn-primary {
     font-size: 0.94rem;
   }
-
   .news-item h3 {
     font-size: 0.92rem;
   }
