@@ -1,3 +1,4 @@
+// File: app.js
 const WORKER_URL = "https://seo-trend-agent.gmo-k-watanabe.workers.dev";
 
 // ============================================
@@ -214,6 +215,7 @@ function renderProgress(activeIndex) {
 
 // ============================================
 // サマリー描画（改行・キャッシュバッジ対応）
+// 結果表示後に「AIによる総合トレンド分析」へ自動スクロール
 // ============================================
 function renderSummary(summary, isCached, generatedAt) {
 
@@ -239,6 +241,15 @@ function renderSummary(summary, isCached, generatedAt) {
   summaryMeta.textContent = metaText;
 
   summaryEl.classList.remove("hidden");
+
+  // ============================================
+  // 「AIによる総合トレンド分析」セクションへ自動スクロール
+  // hidden 解除の直後に requestAnimationFrame で1フレーム待ち、
+  // レイアウト確定後になめらかにスクロールする
+  // ============================================
+  requestAnimationFrame(() => {
+    summaryEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
 }
 
 // ============================================
@@ -365,11 +376,9 @@ function handleError(error) {
     message = error.message;
   }
 
-  // 専用エラーボックスに表示
   if (errorMessage) errorMessage.textContent = message;
   if (errorBox)     errorBox.classList.remove("hidden");
 
-  // summaryへのエラー表示は行わない（既に描画済みのデータは保持）
   if (!summaryContent.textContent) {
     summaryEl.classList.add("hidden");
   }
