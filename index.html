@@ -1,3 +1,5 @@
+<!-- Output: html -->
+<!-- File: index.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -22,6 +24,8 @@
 
   <!-- Hero -->
   <header class="hero">
+    <button id="themeToggle" class="theme-toggle" aria-label="ダークモード切替" title="ダークモード切替">🌙</button>
+
     <div class="hero-inner">
       <h1>🔍 SEOトレンドアンテナAI</h1>
 
@@ -36,6 +40,7 @@
         <span class="badge">外部ニュース連携</span>
         <span class="badge">AI分析</span>
         <span class="badge">多段処理</span>
+        <span class="badge">ナレッジ蓄積</span>
         <span class="badge">SEO特化AIエージェント</span>
       </div>
     </div>
@@ -83,14 +88,23 @@
       <div class="notice-box">
         <p>このAIエージェントは以下を自動実行します：</p>
         <ul>
-          <li>外部SEOニュースの収集（6ソース）</li>
+          <li>外部SEOニュースの収集（9ソース）</li>
           <li>AIによるカテゴリ分類・重要度判定</li>
           <li>重要トレンド分析（Gemini AI）</li>
+          <li>前回のナレッジを踏まえた変化の分析</li>
           <li>SEO改善施策の提案</li>
           <li>優先度判定・ソート</li>
         </ul>
       </div>
 
+    </section>
+
+    <!-- 実行履歴 -->
+    <section id="historySection" class="history-section hidden">
+      <div class="section-header">
+        <h2>🕓 実行履歴（直近5件）</h2>
+      </div>
+      <ul id="historyList" class="history-list"></ul>
     </section>
 
     <!-- エラーボックス（専用表示） -->
@@ -125,7 +139,10 @@
         <h2>📊 AIによる総合トレンド分析</h2>
       </div>
 
-      <div id="summaryMeta" class="summary-meta"></div>
+      <div class="summary-toolbar">
+        <div id="summaryMeta" class="summary-meta"></div>
+        <button id="copySummaryBtn" class="copy-btn" type="button">📋 コピー</button>
+      </div>
 
       <div id="summaryContent"></div>
 
@@ -179,7 +196,7 @@
         <div class="agent-card">
           <h3>外部ナレッジ収集</h3>
           <p>
-            6つのSEOニュースソースを並列巡回し、
+            9つのSEOニュースソースを並列巡回し、
             最新情報をリアルタイム収集します。
           </p>
         </div>
@@ -193,10 +210,10 @@
         </div>
 
         <div class="agent-card">
-          <h3>トレンド分析</h3>
+          <h3>ナレッジ蓄積分析</h3>
           <p>
-            Gemini AIがSEOトレンドを分析し、
-            業界動向と今後の変化を要約します。
+            過去の分析結果を記憶し、前回からの
+            トレンドの変化も踏まえて分析します。
           </p>
         </div>
 
