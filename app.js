@@ -1,3 +1,4 @@
+// File: app.js
 const WORKER_URL = "https://seo-trend-agent.gmo-k-watanabe.workers.dev";
 
 // ============================================
@@ -13,6 +14,7 @@ const progressList  = document.getElementById("progressList");
 const summaryEl     = document.getElementById("summary");
 const summaryMeta   = document.getElementById("summaryMeta");
 const summaryContent = document.getElementById("summaryContent");
+const copySummaryBtn = document.getElementById("copySummaryBtn");
 
 const newsSection   = document.getElementById("newsSection");
 const newsList      = document.getElementById("newsList");
@@ -25,11 +27,22 @@ const actionsList   = document.getElementById("actionsList");
 const errorBox      = document.getElementById("errorBox");
 const errorMessage  = document.getElementById("errorMessage");
 
+const themeToggleBtn  = document.getElementById("themeToggle");
+const historySection  = document.getElementById("historySection");
+const historyList     = document.getElementById("historyList");
+
 // ============================================
 // 実行状態管理
 // ============================================
 let isRunning = false;
 let currentController = null;
+
+// ============================================
+// テーマ・履歴の保存キー
+// ============================================
+const THEME_KEY   = "seo-agent-theme";
+const HISTORY_KEY = "seo-agent-history";
+const MAX_HISTORY = 5;
 
 // ============================================
 // AIエージェント処理ステップ
@@ -46,11 +59,159 @@ const STEPS = [
 // 初期化
 // ============================================
 resetUI();
+initTheme();
+renderHistory();
 
 // ============================================
 // イベント
 // ============================================
 runBtn.addEventListener("click", runAgent);
+
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener("click", toggleTheme);
+}
+
+if (copySummaryBtn) {
+  copySummaryBtn.addEventListener("click", copySummaryToClipboard);
+}
+
+// ============================================
+// テーマ切替
+// ============================================
+function initTheme() {
+  let saved = "";
+  try {
+    saved = localStorage.getItem(THEME_KEY) || "";
+  } catch {}
+  if (saved === "dark") {
+    document.documentElement.setAttribute("data-theme", "dark");
+  }
+  updateThemeIcon();
+}
+
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  if (isDark) {
+    document.documentElement.removeAttribute("data-theme");
+    try { localStorage.setItem(THEME_KEY, "light"); } catch {}
+  } else {
+    document.documentElement.setAttribute("data-theme", "dark");
+    try { localStorage.setItem(THEME_KEY, "dark"); } catch {}
+  }
+  updateThemeIcon();
+}
+
+function updateThemeIcon() {
+  if (!themeToggleBtn) return;
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  themeToggleBtn.textContent = isDark ? "☀️" : "🌙";
+}
+
+// ============================================
+// サマリーコピー
+// ============================================
+async function copySummaryToClipboard() {
+  if (!copySummaryBtn) return;
+  const text = summaryContent ? summaryContent.textContent : "";
+  if (!text) return;
+
+  try {
+    await navigator.clipboard.writeText(text);
+    const original = copySummaryBtn.textContent;
+    copySummaryBtn.textContent = "✅ コピーしました";
+    copySummaryBtn.classList.add("copied");
+    setTimeout(() => {
+      copySummaryBtn.textContent = original;
+      copySummaryBtn.classList.remove("copied");
+    }, 2000);
+  } catch (e) {
+    console.error("Clipboard copy failed:", e);
+    copySummaryBtn.textContent = "コピーに失敗しました";
+    setTimeout(() => {
+      copySummaryBtn.textContent = "📋 コピー";
+    }, 2000);
+  }
+}
+
+// ============================================
+// 実行履歴
+// ============================================
+function loadHistoryArray() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(entry) {
+  try {
+    let history = loadHistoryArray();
+    history.unshift(entry);
+    history = history.slice(0, MAX_HISTORY);
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+    renderHistory();
+  } catch (e) {
+    console.error("History save failed:", e);
+  }
+}
+
+function renderHistory() {
+  if (!historySection || !historyList) return;
+
+  const history = loadHistoryArray();
+  historyList.innerHTML = "";
+
+  if (history.length === 0) {
+    historySection.classList.add("hidden");
+    return;
+  }
+
+  history.forEach((item, idx) => {
+    const li = document.createElement("li");
+    li.className = "history-item";
+
+    let dtText = "";
+    if (item.generatedAt) {
+      try {
+        dtText = new Date(item.generatedAt).toLocaleString("ja-JP");
+      } catch {}
+    }
+
+    const kwText  = escapeHtml(item.keyword || "（全体トレンド）");
+    const catText = escapeHtml(item.categoryLabel || "");
+
+    li.innerHTML = `
+      <span class="history-kw">${kwText}</span>
+      <span class="history-cat">${catText}</span>
+      <span class="history-date">${escapeHtml(dtText)}</span>
+    `;
+
+    li.addEventListener("click", () => loadHistoryItem(idx));
+    historyList.appendChild(li);
+  });
+
+  historySection.classList.remove("hidden");
+}
+
+function loadHistoryItem(idx) {
+  const history = loadHistoryArray();
+  const item = history[idx];
+  if (!item) return;
+
+  resetResultSections();
+  progressEl.classList.add("hidden");
+
+  renderSummary(item.summary || "", false, item.generatedAt);
+  renderNews(Array.isArray(item.news) ? item.news : [], false);
+  renderActions(Array.isArray(item.actions) ? item.actions : []);
+
+  requestAnimationFrame(() => {
+    summaryEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+}
 
 // ============================================
 // メイン実行
@@ -61,6 +222,9 @@ async function runAgent() {
 
   const keyword  = keywordInput.value.trim();
   const category = categorySelect.value;
+  const categoryLabel = categorySelect.options[categorySelect.selectedIndex]
+    ? categorySelect.options[categorySelect.selectedIndex].text
+    : category;
 
   // UI初期化
   resetResultSections();
@@ -160,6 +324,18 @@ async function runAgent() {
     renderActions(actions);
 
     // ============================================
+    // 履歴保存
+    // ============================================
+    saveHistory({
+      keyword,
+      categoryLabel,
+      summary,
+      news,
+      actions,
+      generatedAt: data.generatedAt || new Date().toISOString()
+    });
+
+    // ============================================
     // 全データ空の場合のみ警告
     // ============================================
     if (news.length === 0 && actions.length === 0 && (!summary || summary.length < 5)) {
@@ -220,7 +396,7 @@ function renderSummary(summary, isCached, generatedAt) {
 
   // summaryContent をテキストノードで安全に描画
   summaryContent.textContent = "";
-  const lines = summary.split("\n");
+  const lines = String(summary || "").split("\n");
   lines.forEach((line, i) => {
     summaryContent.appendChild(document.createTextNode(line));
     if (i < lines.length - 1) {
