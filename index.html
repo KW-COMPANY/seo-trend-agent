@@ -1,3 +1,4 @@
+<!-- Output: html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -39,6 +40,7 @@
         <span class="badge">AI分析</span>
         <span class="badge">多段処理</span>
         <span class="badge">ナレッジ蓄積</span>
+        <span class="badge">自己改善ループ</span>
         <span class="badge">SEO特化AIエージェント</span>
       </div>
     </div>
@@ -89,12 +91,34 @@
           <li>外部SEOニュースの収集（9ソース）</li>
           <li>AIによるカテゴリ分類・重要度判定</li>
           <li>重要トレンド分析（Gemini AI）</li>
-          <li>前回のナレッジを踏まえた変化の分析</li>
+          <li>前回のナレッジ＋運用フィードバックを踏まえた分析</li>
           <li>SEO改善施策の提案</li>
           <li>優先度判定・ソート</li>
         </ul>
       </div>
 
+    </section>
+
+    <!-- 学習ステータス（Closed Loop） -->
+    <section id="learningSection" class="learning-section hidden">
+      <div class="section-header">
+        <h2>🧬 AI自己改善ステータス</h2>
+      </div>
+      <div class="learning-stats">
+        <div class="learning-stat">
+          <span class="learning-stat-num" id="lsFeedback">0</span>
+          <span class="learning-stat-label">蓄積フィードバック</span>
+        </div>
+        <div class="learning-stat">
+          <span class="learning-stat-num" id="lsSatisfaction">–</span>
+          <span class="learning-stat-label">提案満足度</span>
+        </div>
+        <div class="learning-stat">
+          <span class="learning-stat-num" id="lsAdopted">0</span>
+          <span class="learning-stat-label">採用アクション</span>
+        </div>
+      </div>
+      <p id="lsDigest" class="learning-digest"></p>
     </section>
 
     <!-- 実行履歴 -->
@@ -144,6 +168,14 @@
 
       <div id="summaryContent"></div>
 
+      <!-- Closed Loop: 分析への評価 -->
+      <div id="feedbackBar" class="feedback-bar hidden">
+        <span class="feedback-label">この分析は役に立ちましたか？</span>
+        <button id="feedbackUp" class="feedback-btn" type="button">👍 役立った</button>
+        <button id="feedbackDown" class="feedback-btn" type="button">👎 いまいち</button>
+        <span id="feedbackThanks" class="feedback-thanks hidden">✅ フィードバックを学習に反映しました</span>
+      </div>
+
     </section>
 
     <!-- 推奨アクション -->
@@ -153,7 +185,14 @@
         <h2>✅ AI推奨アクション</h2>
       </div>
 
+      <p class="actions-hint">実施する施策にチェックを入れると、AIが次回以降その傾向を学習します。</p>
+
       <ol id="actionsList"></ol>
+
+      <button id="submitAdopted" class="adopt-btn hidden" type="button">
+        ✔ チェックした施策を学習に反映
+      </button>
+      <span id="adoptThanks" class="feedback-thanks hidden">✅ 採用施策を学習に反映しました</span>
 
     </section>
 
@@ -220,6 +259,14 @@
           <p>
             AIが実務ベースのSEO改善アクションを
             今すぐ実施できる形で自動生成します。
+          </p>
+        </div>
+
+        <div class="agent-card">
+          <h3>自己改善ループ</h3>
+          <p>
+            評価・採用フィードバックをWorkers AIが学習し、
+            使うほど提案精度が向上します。
           </p>
         </div>
 
