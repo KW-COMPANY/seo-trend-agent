@@ -1,4 +1,3 @@
-// File: app.js
 const WORKER_URL = "https://seo-trend-agent.gmo-k-watanabe.workers.dev";
 
 // ============================================
@@ -31,7 +30,6 @@ const themeToggleBtn  = document.getElementById("themeToggle");
 const historySection  = document.getElementById("historySection");
 const historyList     = document.getElementById("historyList");
 
-// Closed Loop 用DOM
 const learningSection = document.getElementById("learningSection");
 const lsFeedback      = document.getElementById("lsFeedback");
 const lsSatisfaction  = document.getElementById("lsSatisfaction");
@@ -163,7 +161,7 @@ async function copySummaryToClipboard() {
 }
 
 // ============================================
-// Closed Loop: 学習ステータス描画
+// 学習ステータス描画
 // ============================================
 function renderLearningStatus(status) {
   if (!learningSection) return;
@@ -195,7 +193,7 @@ function renderLearningStatus(status) {
 }
 
 // ============================================
-// Closed Loop: 評価フィードバック送信
+// 評価フィードバック送信
 // ============================================
 async function sendRatingFeedback(rating) {
   if (feedbackUp)   feedbackUp.disabled = true;
@@ -226,7 +224,7 @@ async function sendRatingFeedback(rating) {
 }
 
 // ============================================
-// Closed Loop: 採用アクション送信
+// 採用アクション送信
 // ============================================
 async function sendAdoptedFeedback() {
   const checked = actionsList
@@ -363,7 +361,7 @@ async function runAgent() {
     ? categorySelect.options[categorySelect.selectedIndex].text
     : category;
 
-  // Closed Loop: フィードバック対象コンテキストを保存
+  // フィードバック対象コンテキストを保存
   lastContext = { keyword, category };
 
   // UI初期化
@@ -712,7 +710,7 @@ function renderActions(actions) {
 
   actionsEl.classList.remove("hidden");
 
-  // Closed Loop: 採用送信ボタンの表示制御・状態リセット
+  // 採用送信ボタンの表示制御・状態リセット
   if (submitAdopted) {
     if (validCount > 0) {
       submitAdopted.classList.remove("hidden");
@@ -776,7 +774,7 @@ function resetResultSections() {
   if (errorBox)    errorBox.classList.add("hidden");
   if (errorMessage) errorMessage.textContent = "";
 
-  // Closed Loop: フィードバックUIを初期化
+  // フィードバックUIを初期化
   if (feedbackBar)    feedbackBar.classList.add("hidden");
   if (feedbackThanks) feedbackThanks.classList.add("hidden");
   if (submitAdopted)  submitAdopted.classList.add("hidden");
