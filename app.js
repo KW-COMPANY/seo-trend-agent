@@ -1,3 +1,4 @@
+// File: app.js
 const WORKER_URL = "https://seo-trend-agent.gmo-k-watanabe.workers.dev";
 
 // ============================================
@@ -30,11 +31,29 @@ const themeToggleBtn  = document.getElementById("themeToggle");
 const historySection  = document.getElementById("historySection");
 const historyList     = document.getElementById("historyList");
 
+// Closed Loop 用DOM
+const learningSection = document.getElementById("learningSection");
+const lsFeedback      = document.getElementById("lsFeedback");
+const lsSatisfaction  = document.getElementById("lsSatisfaction");
+const lsAdopted       = document.getElementById("lsAdopted");
+const lsDigest        = document.getElementById("lsDigest");
+
+const feedbackBar     = document.getElementById("feedbackBar");
+const feedbackUp      = document.getElementById("feedbackUp");
+const feedbackDown    = document.getElementById("feedbackDown");
+const feedbackThanks  = document.getElementById("feedbackThanks");
+
+const submitAdopted   = document.getElementById("submitAdopted");
+const adoptThanks     = document.getElementById("adoptThanks");
+
 // ============================================
 // 実行状態管理
 // ============================================
 let isRunning = false;
 let currentController = null;
+
+// Closed Loop: 直近実行のコンテキスト（フィードバック送信に使用）
+let lastContext = { keyword: "", category: "all" };
 
 // ============================================
 // テーマ・履歴の保存キー
@@ -72,6 +91,17 @@ if (themeToggleBtn) {
 
 if (copySummaryBtn) {
   copySummaryBtn.addEventListener("click", copySummaryToClipboard);
+}
+
+// Closed Loop: 評価ボタン
+if (feedbackUp) {
+  feedbackUp.addEventListener("click", () => sendRatingFeedback("up"));
+}
+if (feedbackDown) {
+  feedbackDown.addEventListener("click", () => sendRatingFeedback("down"));
+}
+if (submitAdopted) {
+  submitAdopted.addEventListener("click", sendAdoptedFeedback);
 }
 
 // ============================================
@@ -129,6 +159,108 @@ async function copySummaryToClipboard() {
     setTimeout(() => {
       copySummaryBtn.textContent = "📋 コピー";
     }, 2000);
+  }
+}
+
+// ============================================
+// Closed Loop: 学習ステータス描画
+// ============================================
+function renderLearningStatus(status) {
+  if (!learningSection) return;
+  if (!status) {
+    learningSection.classList.add("hidden");
+    return;
+  }
+
+  if (lsFeedback)     lsFeedback.textContent     = String(status.totalFeedback || 0);
+  if (lsSatisfaction) lsSatisfaction.textContent = (status.satisfaction !== null && status.satisfaction !== undefined) ? `${status.satisfaction}%` : "–";
+  if (lsAdopted)      lsAdopted.textContent      = String(status.totalAdopted || 0);
+
+  if (lsDigest) {
+    if (status.digest) {
+      lsDigest.textContent = "🧠 学習内容: " + status.digest;
+      lsDigest.classList.remove("hidden");
+    } else {
+      lsDigest.textContent = "";
+      lsDigest.classList.add("hidden");
+    }
+  }
+
+  // 何らかのデータがあれば表示
+  if ((status.totalFeedback && status.totalFeedback > 0) || status.digest) {
+    learningSection.classList.remove("hidden");
+  } else {
+    learningSection.classList.add("hidden");
+  }
+}
+
+// ============================================
+// Closed Loop: 評価フィードバック送信
+// ============================================
+async function sendRatingFeedback(rating) {
+  if (feedbackUp)   feedbackUp.disabled = true;
+  if (feedbackDown) feedbackDown.disabled = true;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "feedback",
+        rating,
+        keyword: lastContext.keyword,
+        category: lastContext.category
+      })
+    });
+
+    const data = await res.json();
+    if (feedbackThanks) feedbackThanks.classList.remove("hidden");
+    if (data && data.learningStatus) {
+      renderLearningStatus(data.learningStatus);
+    }
+  } catch (e) {
+    console.error("rating feedback failed:", e);
+    if (feedbackUp)   feedbackUp.disabled = false;
+    if (feedbackDown) feedbackDown.disabled = false;
+  }
+}
+
+// ============================================
+// Closed Loop: 採用アクション送信
+// ============================================
+async function sendAdoptedFeedback() {
+  const checked = actionsList
+    ? Array.from(actionsList.querySelectorAll("input[type=checkbox]:checked"))
+    : [];
+
+  const adoptedActions = checked
+    .map(cb => cb.getAttribute("data-action") || "")
+    .filter(t => t.length > 0);
+
+  if (adoptedActions.length === 0) return;
+
+  if (submitAdopted) submitAdopted.disabled = true;
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: "feedback",
+        adoptedActions,
+        keyword: lastContext.keyword,
+        category: lastContext.category
+      })
+    });
+
+    const data = await res.json();
+    if (adoptThanks) adoptThanks.classList.remove("hidden");
+    if (data && data.learningStatus) {
+      renderLearningStatus(data.learningStatus);
+    }
+  } catch (e) {
+    console.error("adopted feedback failed:", e);
+    if (submitAdopted) submitAdopted.disabled = false;
   }
 }
 
@@ -203,6 +335,12 @@ function loadHistoryItem(idx) {
   resetResultSections();
   progressEl.classList.add("hidden");
 
+  // 履歴のコンテキストをフィードバック対象に設定
+  lastContext = {
+    keyword: item.keyword || "",
+    category: item.category || "all"
+  };
+
   renderSummary(item.summary || "", false, item.generatedAt);
   renderNews(Array.isArray(item.news) ? item.news : [], false);
   renderActions(Array.isArray(item.actions) ? item.actions : []);
@@ -224,6 +362,9 @@ async function runAgent() {
   const categoryLabel = categorySelect.options[categorySelect.selectedIndex]
     ? categorySelect.options[categorySelect.selectedIndex].text
     : category;
+
+  // Closed Loop: フィードバック対象コンテキストを保存
+  lastContext = { keyword, category };
 
   // UI初期化
   resetResultSections();
@@ -323,10 +464,16 @@ async function runAgent() {
     renderActions(actions);
 
     // ============================================
+    // Closed Loop: 学習ステータス表示
+    // ============================================
+    renderLearningStatus(data.learningStatus || null);
+
+    // ============================================
     // 履歴保存
     // ============================================
     saveHistory({
       keyword,
+      category,
       categoryLabel,
       summary,
       news,
@@ -415,6 +562,14 @@ function renderSummary(summary, isCached, generatedAt) {
   summaryMeta.textContent = metaText;
 
   summaryEl.classList.remove("hidden");
+
+  // Closed Loop: 評価バーを表示・状態リセット
+  if (feedbackBar) {
+    feedbackBar.classList.remove("hidden");
+    if (feedbackUp)     feedbackUp.disabled = false;
+    if (feedbackDown)   feedbackDown.disabled = false;
+    if (feedbackThanks) feedbackThanks.classList.add("hidden");
+  }
 
   // ============================================
   // 「AIによる総合トレンド分析」セクションへ自動スクロール
@@ -519,6 +674,8 @@ function renderActions(actions) {
 
   actionsList.innerHTML = "";
 
+  let validCount = 0;
+
   if (!Array.isArray(actions) || actions.length === 0) {
     const li = document.createElement("li");
     li.textContent = "推奨アクションを生成できませんでした。";
@@ -526,13 +683,45 @@ function renderActions(actions) {
   } else {
     actions.forEach(action => {
       if (!action || typeof action !== "string") return;
+      const text = action.trim();
+
       const li = document.createElement("li");
-      li.textContent = action.trim();
+      li.className = "action-item";
+
+      // Closed Loop: 採用チェックボックス付き
+      const label = document.createElement("label");
+      label.className = "action-label";
+
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.className = "action-check";
+      cb.setAttribute("data-action", text);
+
+      const span = document.createElement("span");
+      span.className = "action-text";
+      span.textContent = text;
+
+      label.appendChild(cb);
+      label.appendChild(span);
+      li.appendChild(label);
+
       actionsList.appendChild(li);
+      validCount++;
     });
   }
 
   actionsEl.classList.remove("hidden");
+
+  // Closed Loop: 採用送信ボタンの表示制御・状態リセット
+  if (submitAdopted) {
+    if (validCount > 0) {
+      submitAdopted.classList.remove("hidden");
+      submitAdopted.disabled = false;
+    } else {
+      submitAdopted.classList.add("hidden");
+    }
+  }
+  if (adoptThanks) adoptThanks.classList.add("hidden");
 }
 
 // ============================================
@@ -586,6 +775,12 @@ function resetResultSections() {
   actionsEl.classList.add("hidden");
   if (errorBox)    errorBox.classList.add("hidden");
   if (errorMessage) errorMessage.textContent = "";
+
+  // Closed Loop: フィードバックUIを初期化
+  if (feedbackBar)    feedbackBar.classList.add("hidden");
+  if (feedbackThanks) feedbackThanks.classList.add("hidden");
+  if (submitAdopted)  submitAdopted.classList.add("hidden");
+  if (adoptThanks)    adoptThanks.classList.add("hidden");
 }
 
 // ============================================
